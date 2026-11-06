@@ -20,7 +20,7 @@ const rows = timeline
       hasDetail: Boolean(proj),
     };
   })
-  .map((r) => ({ ...r, expandable: Boolean(r.brief || r.docs.length) }))
+  .map((r) => ({ ...r, expandable: Boolean(r.brief) }))
   .sort((a, b) => b.year - a.year || monthKey(b.month) - monthKey(a.month));
 
 const years = [...new Set(rows.map((r) => r.year))];
@@ -58,74 +58,68 @@ const strong = new Set(['대상', '최우수상', '우수상']);
           ))}
         </div>
       </div>
-      <p class="hint">줄을 누르면 요약과 상장, 발표자료 표시. 자세히 보기가 있는 항목은 문제 정의부터 결과까지 전체 내용 확인 가능.</p>
+      <p class="hint">항목을 누르면 문제, 한 일, 결과 요약 표시. 자세히 보기에서 전체 내용 확인 가능.</p>
 
       <div class="timeline" data-filterable>
         {years.map((y) => (
           <section class="year" data-year={y}>
             <h3 class="year-label">{y}</h3>
             <ol class="rows">
-              {rows.filter((r) => r.year === y).map((r) => (
-                <li class:list={['row', { expandable: r.expandable }]} data-kind={r.kind} data-rel={r.project ?? ''}>
-                  {r.expandable ? (
-                    <button type="button" class="row-head" aria-expanded="false" aria-controls={`${r.id}-body`}>
-                      <span class="row-month">{r.month ? `${r.month}월` : ''}</span>
-                      <span class="row-main">
-                        <span class="row-title">{r.title}</span>
-                        <span class="row-org">{r.org}</span>
-                      </span>
-                      <span class="row-side">
-                        <span class="kind">{kinds[r.kind]}</span>
+              {rows.filter((r) => r.year === y).map((r) => {
+                const Head = r.expandable ? 'button' : 'div';
+                const headAttrs = r.expandable
+                  ? { type: 'button', 'aria-expanded': 'false', 'aria-controls': `${r.id}-body` }
+                  : {};
+                return (
+                  <li class:list={['row', { expandable: r.expandable }]} data-kind={r.kind} data-rel={r.project ?? ''}>
+                    <Head class="row-head" {...headAttrs}>
+                      <span class="row-meta">
+                        <span class="row-kind">{kinds[r.kind]}</span>
+                        {r.month && <span class="row-month">{r.month}월</span>}
                         <span class:list={['badge', { strong: strong.has(r.badge) }]}>{r.badge}</span>
-                        <span class="chev" aria-hidden="true"></span>
                       </span>
-                    </button>
-                  ) : (
-                    <div class="row-head static">
-                      <span class="row-month">{r.month ? `${r.month}월` : ''}</span>
-                      <span class="row-main">
-                        <span class="row-title">{r.title}</span>
-                        <span class="row-org">{r.org}</span>
-                      </span>
-                      <span class="row-side">
-                        <span class="kind">{kinds[r.kind]}</span>
-                        <span class:list={['badge', { strong: strong.has(r.badge) }]}>{r.badge}</span>
-                        <span class="chev none" aria-hidden="true"></span>
-                      </span>
-                    </div>
-                  )}
-                  {r.expandable && (
-                    <div class="row-body" id={`${r.id}-body`} hidden>
-                      {r.brief && (
+                      <span class="row-title">{r.title}</span>
+                      <span class="row-org">{r.org}</span>
+                      {r.desc && <span class="row-desc">{r.desc}</span>}
+                      {r.metrics && (
+                        <span class="metrics">
+                          {r.metrics.map((m) => (
+                            <span class="metric"><span class="metric-value">{m.value}</span><span class="metric-label">{m.label}</span></span>
+                          ))}
+                        </span>
+                      )}
+                    </Head>
+                    {r.expandable && (
+                      <div class="row-body" id={`${r.id}-body`} hidden>
                         <dl class="brief">
                           <div><dt>문제</dt><dd>{r.brief.problem}</dd></div>
                           <div><dt>한 일</dt><dd>{r.brief.action}</dd></div>
                           <div><dt>결과</dt><dd>{r.brief.result}</dd></div>
                         </dl>
-                      )}
-                      {r.docs.length > 0 && (
-                        <div class="row-docs">
-                          <span class="row-docs-label">자료</span>
-                          <DocLinks docs={r.docs} caption={r.title} />
-                        </div>
-                      )}
-                      {r.tags && <ul class="tags">{r.tags.map((t) => <li>{t}</li>)}</ul>}
-                      {(r.hasDetail || r.links) && (
-                        <p class="row-links">
-                          {r.hasDetail && (
-                            <a class="more" href={`/projects/${r.project}/`} data-open={r.project}>
-                              {projects[r.project].title} 자세히 보기
-                            </a>
-                          )}
-                          {r.links?.map((l) => (
-                            <a class="more ext" href={l.url} rel="noopener" target="_blank">{l.label}</a>
-                          ))}
-                        </p>
-                      )}
-                    </div>
-                  )}
-                </li>
-              ))}
+                        {r.tags && <ul class="tags">{r.tags.map((t) => <li>{t}</li>)}</ul>}
+                      </div>
+                    )}
+                    {(r.expandable || r.hasDetail || r.links || r.docs.length > 0) && (
+                      <div class="row-actions">
+                        {r.expandable && (
+                          <button type="button" class="act toggle" aria-expanded="false" aria-controls={`${r.id}-body`}>
+                            <span class="toggle-open">요약 펼치기</span><span class="toggle-close">요약 접기</span>
+                          </button>
+                        )}
+                        {r.hasDetail && (
+                          <a class="act primary" href={`/projects/${r.project}/`} data-open={r.project}>
+                            {projects[r.project].title === r.title ? '자세히 보기' : `${projects[r.project].title} 자세히 보기`}
+                          </a>
+                        )}
+                        {r.docs.length > 0 && <DocLinks docs={r.docs} caption={r.title} />}
+                        {r.links?.map((l) => (
+                          <a class="act ext" href={l.url} rel="noopener" target="_blank">{l.label}</a>
+                        ))}
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
             </ol>
           </section>
         ))}

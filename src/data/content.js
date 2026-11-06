@@ -47,33 +47,53 @@ export const kinds = {
 // month: null 이면 월 미표기
 // kind: project / award / patent / contest / github
 // project: 연결된 상세 페이지 slug (없으면 펼침 없음)
+// desc, metrics: 펼치지 않아도 보이는 설명 한두 줄과 핵심 수치 (최대 3개)
 // brief: 펼쳤을 때 보이는 문제 / 한 일 / 결과 한 줄씩
 export const timeline = [
   {
     year: 2026, month: null, kind: 'project',
     title: 'RecallFrame',
-    org: '가족 화상대화 액자, HL Future Day 2026 New Business Idea',
+    org: 'HL Future Day 2026 New Business Idea',
     badge: '팀장',
+    desc: '기억 속 가족의 얼굴과 목소리로 대화하는 온디바이스 화상대화 액자. 사진 1장과 음성 5초로 가족을 등록하고, 모든 처리를 태블릿 안에서 수행.',
+    metrics: [
+      { value: '21fps', label: '얼굴 합성' },
+      { value: '0.4초', label: '음성 합성 지연' },
+      { value: '특허 출원', label: '2026년 7월' },
+    ],
     project: 'recallframe',
   },
   {
     year: 2026, month: null, kind: 'contest',
     title: 'SK하이닉스 AI 해커톤 2026',
-    org: '기초 지식 테스트와 AI 활용 문제 풀이 예선',
+    org: 'SK하이닉스',
+    desc: '기초 지식 테스트와 AI 활용 문제 풀이 예선.',
     badge: '1차 예선 통과',
   },
   {
     year: 2026, month: null, kind: 'project',
     title: 'SYNAPSE',
-    org: '보행자 행동 예측 교통사고 예방 AI, 2026 캡스톤디자인 페스티벌',
+    org: '2026 캡스톤디자인 페스티벌, ARGOS 팀',
     badge: '팀장',
+    desc: '보행자의 자세와 시선으로 행동 의도를 읽어 사고 0.5~1초 전에 위험을 예측하는 교통사고 예방 AI. 230달러짜리 엣지 장비에서 서버 없이 실시간 동작.',
+    metrics: [
+      { value: '97%', label: '사고 예측 정확도' },
+      { value: '약 30ms', label: '프레임당 처리' },
+      { value: '230달러', label: '장비 비용' },
+    ],
     project: 'synapse',
   },
   {
     year: 2026, month: 7, kind: 'contest',
     title: '2026 SW중심대학 디지털 경진대회 AI부문',
-    org: 'DACON, AI 코딩 에이전트 다음 행동 예측, 팀장',
+    org: 'DACON, 팀장',
     badge: '예선 30위',
+    desc: 'AI 코딩 에이전트의 다음 행동 14종 분류. 오프라인 T4에서 3만 건을 10분 안에 추론해야 하는 제약 아래 int8 3모델 앙상블.',
+    metrics: [
+      { value: '0.79231', label: 'Macro-F1' },
+      { value: '8분 57초', label: 'T4 추론 (제한 10분)' },
+      { value: '약 이틀', label: '리더보드 1위 유지' },
+    ],
     project: 'dacon-agent',
   },
   {
@@ -81,6 +101,7 @@ export const timeline = [
     title: '회상치료를 지원하는 온디바이스 화상대화 장치 및 그 방법',
     org: '특허 출원 10-2026-0127005',
     badge: '발명자',
+    desc: '가족의 얼굴과 목소리로 회상 대화를 이어가는 온디바이스 장치와 방법. 2026년 7월 10일 출원, 심사청구 완료.',
     docs: [D.patent],
     project: 'recallframe',
     brief: {
@@ -94,6 +115,7 @@ export const timeline = [
     title: '2025 한라인재페스티벌 산학협력프로젝트',
     org: '한라대학교 총장상, 온비IT 팀',
     badge: '대상',
+    desc: '배관 로봇 영상에서 부식, 크랙, 천공을 찾아내는 AI. 데이터 정제와 모델 학습 담당.',
     docs: [D.certOnbi, D.pipePoster],
     project: 'pipe-robot',
   },
@@ -109,6 +131,7 @@ export const timeline = [
     title: '2025 캡스톤디자인 아이디어 경진대회',
     org: '한라대학교 공학교육혁신센터, ARGOS 팀',
     badge: '최우수상',
+    desc: '보행자 행동 예측 교통사고 예방 AI 아이디어(SYNAPSE)로 수상.',
     docs: [D.certArgos],
     project: 'synapse',
   },
@@ -117,6 +140,7 @@ export const timeline = [
     title: 'HL D&I한라와 함께하는 한라대학교 ESG 아이디어 공모전',
     org: 'HAI_Medicare 팀',
     badge: '대상',
+    desc: 'RAG 기반 진료보조 챗봇 AI Medicare. 데이터 전처리, 화면, API 연동 담당.',
     docs: [D.certEsg],
     project: 'medicare',
   },
@@ -133,8 +157,14 @@ export const timeline = [
     kind: 'github',
     year: 2026, month: 10,
     title: 'Velyn',
-    org: '사진이 기기 밖으로 나가지 않는 iPhone 사진 편집기',
+    org: 'iPhone 사진 편집기',
     badge: 'Swift',
+    desc: '사진이 기기 밖으로 나가지 않는 편집기. RAW 현상, 색 보정, 객체 제거, HDR 게인맵 예측까지 모두 기기 안에서 처리.',
+    metrics: [
+      { value: '0.328 EV', label: '휘도 오차 (기존 0.488 EV)' },
+      { value: '83개', label: '엔진 테스트 통과' },
+      { value: 'v1.2.0', label: '릴리스' },
+    ],
     brief: {
       problem: '고급 사진 편집 앱은 대부분 사진을 서버로 올리거나 계정을 요구하고, 일반 SDR 사진은 HDR 화면의 밝기 여유를 쓰지 못함.',
       action: 'RAW 현상, 색 보정, 로컬 마스크, 객체 제거, 심도 블러를 모두 기기 안에서 처리하는 편집 엔진 개발. SDR 사진에서 HDR 게인맵을 예측하는 GMNet을 실제 카메라 HDR/SDR 사진 쌍으로 파인튜닝해 Core ML로 탑재.',
@@ -150,8 +180,12 @@ export const timeline = [
     kind: 'github',
     year: 2026, month: 10,
     title: 'Pinpage',
-    org: '막힌 문제의 근거를 학습 자료 속 정확한 위치로 짚어주는 macOS 학습 앱',
+    org: 'macOS 학습 앱',
     badge: 'Swift',
+    desc: '막힌 문제의 근거를 학습 자료 속 정확한 문장으로 짚어주는 앱. 자료에서 확인되지 않은 인용은 앱이 걸러냄.',
+    metrics: [
+      { value: '3.8초', label: '응답 시간 (기존 17초, 오답)' },
+    ],
     brief: {
       problem: 'AI에게 바로 답을 물으면 근거가 자료 어디에 있는지 알 수 없고, 그럴듯한 오답도 그대로 믿게 됨.',
       action: 'PDF와 코드를 문단 단위로 색인하고, 한글 음절 바이그램 BM25와 Core ML 임베딩을 섞은 하이브리드 검색 구현. LLM 답변의 인용이 실제 자료에 있는지 앱이 검증해 확인되지 않은 인용은 버리고, 근거를 누르면 PDF의 해당 문장을 강조.',
@@ -164,8 +198,9 @@ export const timeline = [
     kind: 'github',
     year: 2026, month: 10,
     title: 'kit',
-    org: 'Codex로 과제를 수행할 때 쓰는 작업 하네스',
+    org: 'Codex 작업 하네스',
     badge: 'Python',
+    desc: '규칙 파일, 작업 문서 템플릿, 검증 도구를 하나로 묶어 긴 과제를 완료 조건 단위로 나눠 진행. 내 과제 작업에 실제로 사용 중.',
     brief: {
       problem: '코딩 에이전트에게 긴 과제를 맡기면 요구사항을 빠뜨리거나, 검증 없이 넘어가거나, 세션이 바뀔 때 맥락을 잃음.',
       action: '규칙 파일(AGENTS.md), 작업 문서 템플릿(TASK, DECISIONS, HANDOFF, VERIFY), 단계별 지시 카드, 검증 도구(테스트 요약, 웹 체크, DB 대조)를 하나로 묶음. 요구사항을 완료 조건 단위로 나눠 조건마다 구현, 테스트, 커밋 후 멈추도록 구성.',
@@ -178,8 +213,14 @@ export const timeline = [
     kind: 'github',
     year: 2026, month: 6,
     title: 'Gemma 4 31B 서빙 스택',
-    org: 'RTX PRO 6000 한 장으로 31B 모델을 256K 컨텍스트로 서빙',
+    org: 'LLM 서빙',
     badge: 'Shell, Python',
+    desc: 'RTX PRO 6000 한 장으로 Gemma 4 31B를 256K 컨텍스트로 서빙. vLLM에 FP8 KV 캐시와 MTP 추측 디코딩 적용.',
+    metrics: [
+      { value: '103.2 tok/s', label: '단일 요청 (기존 42.1, 2.45배)' },
+      { value: '294 tok/s', label: '동시 3요청 합산' },
+      { value: '94~97%', label: '초안 수락률' },
+    ],
     brief: {
       problem: '31B 모델을 GPU 한 장에서 쓸 만한 속도로 서빙하기 어렵고, 클라이언트마다 요청 형식이 달라 로그 관리와 파라미터 처리가 제각각임.',
       action: 'vLLM에 FP8 KV 캐시와 MTP 추측 디코딩(초안 5토큰)을 적용하고, 선택 근거를 ADR로 기록. 앞단에 비동기 FastAPI 프록시를 따로 두어 요청 로그 기록, thinking 파라미터 4종 통일, 샘플링 기본값 주입, 관리용 엔드포인트 차단을 맡김.',

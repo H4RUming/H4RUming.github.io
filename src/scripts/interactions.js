@@ -4,13 +4,17 @@ const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
 /* ---------- 1. 펼치기 ---------- */
-$$('.row-head[aria-expanded]').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const open = btn.getAttribute('aria-expanded') === 'true';
-    btn.setAttribute('aria-expanded', String(!open));
-    const body = document.getElementById(btn.getAttribute('aria-controls'));
-    body.hidden = open;
-    btn.closest('.row').classList.toggle('open', !open);
+// 카드 위쪽 영역과 아래 '요약 펼치기' 버튼이 같은 본문을 연다
+$$('.row.expandable').forEach((row) => {
+  const controls = $$('[aria-controls][aria-expanded]', row);
+  const body = document.getElementById(controls[0].getAttribute('aria-controls'));
+  controls.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const open = !row.classList.contains('open');
+      row.classList.toggle('open', open);
+      body.hidden = !open;
+      controls.forEach((c) => c.setAttribute('aria-expanded', String(open)));
+    });
   });
 });
 
