@@ -331,10 +331,13 @@ export const repos = [
     brief: {
       problem: '고급 사진 편집 앱은 대부분 사진을 서버로 올리거나 계정을 요구하고, 일반 SDR 사진은 HDR 화면의 밝기 여유를 쓰지 못한다.',
       action: 'RAW 현상, 색 보정, 로컬 마스크, 객체 제거, 심도 블러를 모두 기기 안에서 처리하는 편집 엔진을 만들었다. SDR 사진에서 HDR 게인맵을 예측하는 GMNet을 실제 카메라 HDR/SDR 사진 쌍으로 파인튜닝해 Core ML로 넣었다.',
-      result: '132장 평가에서 평균 휘도 오차 0.488 EV를 0.328 EV로 줄였다. 엔진 테스트 83개 통과, v1.2.0 릴리스.',
+      result: '132장 평가에서 평균 휘도 오차 0.488 EV를 0.328 EV로 줄였다. 엔진 테스트 83개 통과, v1.2.0 릴리스. 파인튜닝한 모델은 PyTorch 가중치와 Core ML 패키지로 Hugging Face에 공개했다.',
     },
     tags: ['Swift', 'Core ML', 'On-Device ML', 'HDR Gain Map', 'AOT-GAN', 'Depth Anything V2'],
-    links: [{ label: 'GitHub 저장소', url: 'https://github.com/H4RUming/Velyn' }],
+    links: [
+      { label: 'GitHub 저장소', url: 'https://github.com/H4RUming/Velyn' },
+      { label: 'Hugging Face 모델 (GMNet Camera v1)', url: 'https://huggingface.co/H4RUming/Velyn-GMNet-Camera-v1' },
+    ],
   },
   {
     year: 2026, month: 10,
