@@ -20,10 +20,10 @@ filters.forEach((f) => {
   f.addEventListener('click', () => {
     const kind = f.dataset.filter;
     filters.forEach((x) => x.setAttribute('aria-pressed', String(x === f)));
-    $$('.row').forEach((row) => {
+    $$('[data-filterable] .row').forEach((row) => {
       row.hidden = kind !== 'all' && row.dataset.kind !== kind;
     });
-    $$('.year').forEach((y) => {
+    $$('[data-filterable] .year').forEach((y) => {
       y.hidden = $$('.row', y).every((r) => r.hidden);
     });
   });

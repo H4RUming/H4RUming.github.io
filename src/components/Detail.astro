@@ -11,6 +11,9 @@ const H = headingLevel;
     <div><dt>기간</dt><dd>{p.period}</dd></div>
     <div><dt>역할</dt><dd>{p.role}</dd></div>
     <div><dt>팀</dt><dd>{p.team}</dd></div>
+    {p.links && (
+      <div><dt>링크</dt><dd>{p.links.map((l) => <a href={l.url} rel="noopener" target="_blank">{l.label}</a>)}</dd></div>
+    )}
   </dl>
 </header>
 

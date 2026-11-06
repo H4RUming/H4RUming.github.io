@@ -7,7 +7,7 @@ export const profile = {
   nameEn: 'Kim Yongmin',
   affiliation: '한라대학교 IT소프트웨어학과, 동아리 HAI',
   tagline: '온디바이스에서 동작하는 AI를 만듭니다.',
-  email: 'sofin1727@gmail.com',
+  email: 'h4ruming@gmail.com',
   github: 'https://github.com/H4RUming',
 };
 
@@ -23,7 +23,6 @@ export const kinds = {
   project: '프로젝트',
   award: '수상',
   patent: '특허',
-  cert: '수료',
 };
 
 // month: null 이면 월 미표기
@@ -82,18 +81,6 @@ export const timeline = [
     org: 'HAI_Medicare 팀',
     badge: '대상',
     project: 'medicare',
-  },
-  {
-    year: 2025, month: 9, kind: 'award',
-    title: '2025학년도 1학기 COMPASS 학생패널',
-    org: '한라대학교 교육성과인증센터',
-    badge: '장려상',
-  },
-  {
-    year: 2025, month: 7, kind: 'cert',
-    title: 'SW중심대학 대학연합 SW창업캠프',
-    org: '삼육대학교 SW중심대학사업단 주관, 5개 대학 공동',
-    badge: '수료',
   },
   {
     year: 2024, month: 11, kind: 'award',
@@ -195,6 +182,7 @@ export const projects = {
     context: 'HL D&I한라와 함께하는 한라대학교 ESG 아이디어 공모전',
     role: '개발 (프론트엔드, 데이터 전처리, API 연동)',
     team: '5인 팀 (HAI_Medicare)',
+    links: [{ label: 'GitHub 저장소', url: 'https://github.com/H4RUming/HAI_Medicare' }],
     brief: {
       problem: '의료 취약 지역은 의사를 만나기 어렵고, 기존 헬스케어 챗봇은 범용 모델이라 전문성이 부족하다.',
       action: '의료 데이터 전처리와 챗 UI, 모델 API 연동을 맡아 근거와 참고 자료를 함께 보여주는 RAG 챗봇을 만들었다.',
@@ -267,9 +255,70 @@ export const projects = {
   },
 };
 
+// GitHub 공개 저장소 중 포트폴리오에 넣는 것들 (최근 순)
+export const repos = [
+  {
+    year: 2026, month: 10,
+    title: 'Velyn',
+    subtitle: '사진이 기기 밖으로 나가지 않는 iPhone 사진 편집기',
+    lang: 'Swift',
+    brief: {
+      problem: '고급 사진 편집 앱은 대부분 사진을 서버로 올리거나 계정을 요구하고, 일반 SDR 사진은 HDR 화면의 밝기 여유를 쓰지 못한다.',
+      action: 'RAW 현상, 색 보정, 로컬 마스크, 객체 제거, 심도 블러를 모두 기기 안에서 처리하는 편집 엔진을 만들었다. SDR 사진에서 HDR 게인맵을 예측하는 GMNet을 실제 카메라 HDR/SDR 사진 쌍으로 파인튜닝해 Core ML로 넣었다.',
+      result: '132장 평가에서 평균 휘도 오차 0.488 EV를 0.328 EV로 줄였다. 엔진 테스트 83개 통과, v1.2.0 릴리스.',
+    },
+    tags: ['Swift', 'Core ML', 'On-Device ML', 'HDR Gain Map', 'AOT-GAN', 'Depth Anything V2'],
+    links: [{ label: 'GitHub 저장소', url: 'https://github.com/H4RUming/Velyn' }],
+  },
+  {
+    year: 2026, month: 10,
+    title: 'Pinpage',
+    subtitle: '막힌 문제의 근거를 학습 자료 속 정확한 위치로 짚어주는 macOS 학습 앱',
+    lang: 'Swift',
+    brief: {
+      problem: 'AI에게 바로 답을 물으면 근거가 자료 어디에 있는지 알 수 없고, 그럴듯한 오답도 그대로 믿게 된다.',
+      action: 'PDF와 코드를 문단 단위로 색인하고, 한글 음절 바이그램 BM25와 Core ML 임베딩을 섞은 하이브리드 검색을 만들었다. LLM 답변의 인용이 실제 자료에 있는지 앱이 검증해서, 확인되지 않은 인용은 버리고 근거를 누르면 PDF의 해당 문장을 강조한다.',
+      result: '근거가 확인되지 않으면 자료에 없다고 답한다. 추론 모드 설정 비교 실측에서 응답이 17초 오답에서 3.8초 정답으로 바뀌었다.',
+    },
+    tags: ['SwiftUI', 'Core ML', 'EmbeddingGemma', 'Hybrid Search', 'RAG'],
+    links: [{ label: 'GitHub 저장소', url: 'https://github.com/H4RUming/Pinpage' }],
+  },
+  {
+    year: 2026, month: 10,
+    title: 'kit',
+    subtitle: 'Codex로 과제를 수행할 때 쓰는 작업 하네스',
+    lang: 'Python',
+    brief: {
+      problem: '코딩 에이전트에게 긴 과제를 맡기면 요구사항을 빠뜨리거나, 검증 없이 넘어가거나, 세션이 바뀔 때 맥락을 잃는다.',
+      action: '규칙 파일(AGENTS.md), 작업 문서 템플릿(TASK, DECISIONS, HANDOFF, VERIFY), 단계별 지시 카드, 검증 도구(테스트 요약, 웹 체크, DB 대조)를 하나로 묶었다. 요구사항을 완료 조건 단위로 나눠 조건마다 구현, 테스트, 커밋을 하고 멈추게 했다.',
+      result: '내 과제 작업에 실제로 쓰고 있다. 설치 스크립트 한 줄로 어느 과제 폴더에든 적용되고, 도구는 Python 표준 라이브러리만 쓴다.',
+    },
+    tags: ['Codex', 'Agent Harness', 'Python'],
+    links: [{ label: 'GitHub 저장소', url: 'https://github.com/H4RUming/kit' }],
+  },
+  {
+    year: 2026, month: 6,
+    title: 'Gemma 4 31B 서빙 스택',
+    subtitle: 'RTX PRO 6000 한 장으로 31B 모델을 256K 컨텍스트로 서빙',
+    lang: 'Shell, Python',
+    brief: {
+      problem: '31B 모델을 GPU 한 장에서 쓸 만한 속도로 서빙하기 어렵고, 클라이언트마다 요청 형식이 달라 로그 관리와 파라미터 처리가 제각각이다.',
+      action: 'vLLM에 FP8 KV 캐시와 MTP 추측 디코딩(초안 5토큰)을 적용하고, 선택 근거를 ADR로 남겼다. 앞단에 비동기 FastAPI 프록시를 따로 두어 요청 로그 기록, thinking 파라미터 4종 통일, 샘플링 기본값 주입, 관리용 엔드포인트 차단을 맡겼다.',
+      result: '단일 요청 42.1에서 103.2 tok/s로 2.45배, 동시 3요청 합산 294 tok/s. 초안 수락률 94~97%, KV 캐시 49만 5천 토큰.',
+    },
+    tags: ['vLLM', 'FP8', 'Speculative Decoding', 'FastAPI', 'systemd'],
+    links: [
+      { label: 'stack 저장소', url: 'https://github.com/H4RUming/gemma4-vllm-stack' },
+      { label: 'proxy 저장소', url: 'https://github.com/H4RUming/gemma4-vllm-proxy' },
+    ],
+  },
+];
+
 export const skills = [
   { group: 'AI / ML', items: ['PyTorch', 'YOLOv8', 'ByteTrack', 'GNN', 'Mixture of Experts', 'Multimodal LLM', 'RAG', 'FAISS', 'TTS', 'Quantization'] },
+  { group: 'LLM Serving', items: ['vLLM', 'FP8 KV Cache', 'Speculative Decoding', 'systemd'] },
   { group: 'Backend', items: ['Python', 'FastAPI'] },
+  { group: 'Apple', items: ['Swift', 'SwiftUI', 'Core ML'] },
   { group: 'Edge / HW', items: ['Raspberry Pi 5', 'Hailo-8 NPU', 'Mobile APU'] },
   { group: 'Data', items: ['AI Hub', 'OpenCV', 'Polygon Labeling', 'Preprocessing'] },
 ];
