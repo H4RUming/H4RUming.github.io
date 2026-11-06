@@ -141,7 +141,6 @@ h1 {
 .theme button:hover { color: var(--text); }
 .theme button[aria-pressed='true'] { color: var(--text); background: var(--hover); font-weight: 600; }
 .affil { margin: 6px 0 0; color: var(--muted); font-size: 0.95rem; }
-.tagline { margin: 28px 0 0; font-size: 1.25rem; font-weight: 500; }
 
 .stats {
   display: flex;
@@ -558,7 +557,6 @@ kbd {
 @media (max-width: 640px) {
   .wrap { padding: 44px 18px 40px; }
   h1 { font-size: 1.7rem; }
-  .tagline { font-size: 1.1rem; }
   .stats div { min-width: 33%; flex: 1 1 33%; }
   .stats div + div { padding-left: 0; border-left: 0; }
   .year { grid-template-columns: 1fr; }

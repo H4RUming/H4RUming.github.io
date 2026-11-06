@@ -39,7 +39,6 @@ const strong = new Set(['대상', '최우수상', '우수상']);
         </nav>
       </div>
       <p class="affil">{profile.affiliation}</p>
-      <p class="tagline">{profile.tagline}</p>
       <dl class="stats">
         {stats.map((s) => (
           <div><dt>{s.label}</dt><dd>{s.value}</dd></div>
@@ -59,7 +58,7 @@ const strong = new Set(['대상', '최우수상', '우수상']);
           ))}
         </div>
       </div>
-      <p class="hint">줄을 누르면 요약과 상장, 발표자료가 열립니다. 자세히 보기가 있는 항목은 문제 정의부터 결과까지 전체 내용을 볼 수 있습니다.</p>
+      <p class="hint">줄을 누르면 요약과 상장, 발표자료 표시. 자세히 보기가 있는 항목은 문제 정의부터 결과까지 전체 내용 확인 가능.</p>
 
       <div class="timeline" data-filterable>
         {years.map((y) => (
