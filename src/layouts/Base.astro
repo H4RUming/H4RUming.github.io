@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-const { title, description = '김용민 포트폴리오 — 온디바이스·엣지 AI' } = Astro.props;
+const { title, description = '김용민 포트폴리오. 온디바이스와 엣지 환경에서 동작하는 AI 프로젝트 모음' } = Astro.props;
 ---
 <!doctype html>
 <html lang="ko">
@@ -9,6 +9,15 @@ const { title, description = '김용민 포트폴리오 — 온디바이스·엣
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      // 저장된 선택이 없으면 시스템 설정을 따른다. 깜빡임 방지를 위해 head에서 바로 실행.
+      (function () {
+        var saved = null;
+        try { saved = localStorage.getItem('theme'); } catch (e) {}
+        var sys = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = saved === 'light' || saved === 'dark' ? saved : sys;
+      })();
+    </script>
     <title>{title}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />

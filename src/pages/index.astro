@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Detail from '../components/Detail.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 import { profile, stats, kinds, timeline, projects, skills } from '../data/content.js';
 
 const years = [...new Set(timeline.map((t) => t.year))].sort((a, b) => b - a);
@@ -11,7 +12,7 @@ const rows = timeline.map((t, i) => {
 });
 const strong = new Set(['대상', '최우수상', '우수상']);
 ---
-<Base title={`${profile.name} · Portfolio`}>
+<Base title={`${profile.name} 포트폴리오`}>
   <div class="wrap">
     <header class="intro">
       <div class="intro-top">
@@ -19,6 +20,7 @@ const strong = new Set(['대상', '최우수상', '우수상']);
         <nav class="links" aria-label="연락처">
           <a href={`mailto:${profile.email}`}>{profile.email}</a>
           <a href={profile.github} rel="noopener">GitHub</a>
+          <ThemeToggle />
         </nav>
       </div>
       <p class="affil">{profile.affiliation}</p>
@@ -40,7 +42,7 @@ const strong = new Set(['대상', '최우수상', '우수상']);
           ))}
         </div>
       </div>
-      <p class="hint">줄을 누르면 요약이, ‘자세히’를 누르면 문제 정의부터 결과까지 전체 내용이 열립니다.</p>
+      <p class="hint">줄을 누르면 요약이 열리고, 자세히 보기를 누르면 문제 정의부터 결과까지 전체 내용을 볼 수 있습니다.</p>
 
       <div class="timeline">
         {years.map((y) => (
@@ -51,7 +53,7 @@ const strong = new Set(['대상', '최우수상', '우수상']);
                 <li class:list={['row', { expandable: r.brief }]} data-kind={r.kind} data-rel={r.project ?? ''}>
                   {r.brief ? (
                     <button type="button" class="row-head" aria-expanded="false" aria-controls={`${r.id}-body`}>
-                      <span class="row-month">{r.month ? String(r.month).padStart(2, '0') : '—'}</span>
+                      <span class="row-month">{r.month ? `${r.month}월` : ''}</span>
                       <span class="row-main">
                         <span class="row-title">{r.title}</span>
                         <span class="row-org">{r.org}</span>
@@ -64,7 +66,7 @@ const strong = new Set(['대상', '최우수상', '우수상']);
                     </button>
                   ) : (
                     <div class="row-head static">
-                      <span class="row-month">{r.month ? String(r.month).padStart(2, '0') : '—'}</span>
+                      <span class="row-month">{r.month ? `${r.month}월` : ''}</span>
                       <span class="row-main">
                         <span class="row-title">{r.title}</span>
                         <span class="row-org">{r.org}</span>
@@ -85,7 +87,7 @@ const strong = new Set(['대상', '최우수상', '우수상']);
                       </dl>
                       {r.hasDetail && (
                         <a class="more" href={`/projects/${r.project}/`} data-open={r.project}>
-                          {projects[r.project].title} 자세히 보기 <span aria-hidden="true">→</span>
+                          {projects[r.project].title} 자세히 보기
                         </a>
                       )}
                     </div>
@@ -102,7 +104,7 @@ const strong = new Set(['대상', '최우수상', '우수상']);
         {skills.map((g) => (
           <div class="skill-group">
             <h3>{g.group}</h3>
-            <p>{g.items.join(' · ')}</p>
+            <ul class="tags">{g.items.map((t) => <li>{t}</li>)}</ul>
           </div>
         ))}
       </section>

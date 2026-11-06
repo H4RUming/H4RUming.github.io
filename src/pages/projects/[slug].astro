@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Detail from '../../components/Detail.astro';
+import ThemeToggle from '../../components/ThemeToggle.astro';
 import { profile, projects } from '../../data/content.js';
 
 export function getStaticPaths() {
@@ -9,9 +10,12 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const p = projects[slug];
 ---
-<Base title={`${p.title} · ${profile.name}`} description={p.subtitle}>
+<Base title={`${p.title} | ${profile.name} 포트폴리오`} description={p.subtitle}>
   <div class="wrap page">
-    <a class="back" href={`/#${slug}`}><span aria-hidden="true">←</span> 연혁으로</a>
+    <div class="page-top">
+      <a class="back" href={`/#${slug}`}>연혁으로 돌아가기</a>
+      <ThemeToggle />
+    </div>
     <article class="detail">
       <Detail slug={slug} p={p} headingLevel="h1" />
     </article>

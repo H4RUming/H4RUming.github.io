@@ -138,3 +138,36 @@ $$('[data-pipe]').forEach((pipe) => {
     });
   });
 });
+
+/* ---------- 6. 라이트/다크 전환 ---------- */
+const media = matchMedia('(prefers-color-scheme: dark)');
+const sysTheme = () => (media.matches ? 'dark' : 'light');
+const readSaved = () => {
+  try { return localStorage.getItem('theme'); } catch { return null; }
+};
+const writeSaved = (value) => {
+  try {
+    if (value) localStorage.setItem('theme', value);
+    else localStorage.removeItem('theme');
+  } catch {}
+};
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  $$('[data-theme-set]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.themeSet === theme)));
+}
+
+applyTheme(document.documentElement.dataset.theme || sysTheme());
+
+$$('[data-theme-set]').forEach((b) => {
+  b.addEventListener('click', () => {
+    const theme = b.dataset.themeSet;
+    // 시스템 설정과 같은 쪽을 고르면 저장하지 않고 다시 시스템을 따른다
+    writeSaved(theme === sysTheme() ? null : theme);
+    applyTheme(theme);
+  });
+});
+
+media.addEventListener('change', () => {
+  if (!readSaved()) applyTheme(sysTheme());
+});
