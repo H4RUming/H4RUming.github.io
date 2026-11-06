@@ -2,16 +2,25 @@
 import Base from '../layouts/Base.astro';
 import Detail from '../components/Detail.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
-import { profile, stats, kinds, timeline, projects, repos, skills } from '../data/content.js';
+import { profile, stats, kinds, timeline, projects, skills } from '../data/content.js';
 
-const repoYears = [...new Set(repos.map((r) => r.year))].sort((a, b) => b - a);
+// 연도 내림차순, 같은 해에서는 월이 없는 항목을 맨 위에 두고 월 내림차순. 같은 값이면 데이터 순서 유지.
+const monthKey = (m) => (m == null ? 13 : m);
+const rows = timeline
+  .map((t, i) => {
+    const proj = t.project ? projects[t.project] : null;
+    return {
+      ...t,
+      id: `r${i}`,
+      brief: t.brief ?? proj?.brief ?? null,
+      links: t.links ?? proj?.links ?? null,
+      hasDetail: Boolean(proj),
+    };
+  })
+  .sort((a, b) => b.year - a.year || monthKey(b.month) - monthKey(a.month));
 
-const years = [...new Set(timeline.map((t) => t.year))].sort((a, b) => b - a);
-const rows = timeline.map((t, i) => {
-  const proj = t.project ? projects[t.project] : null;
-  const brief = t.brief ?? proj?.brief ?? null;
-  return { ...t, id: `r${i}`, brief, hasDetail: Boolean(proj) };
-});
+const years = [...new Set(rows.map((r) => r.year))];
+const counts = Object.fromEntries(Object.keys(kinds).map((k) => [k, rows.filter((r) => r.kind === k).length]));
 const strong = new Set(['대상', '최우수상', '우수상']);
 ---
 <Base title={`${profile.name} 포트폴리오`}>
@@ -38,13 +47,15 @@ const strong = new Set(['대상', '최우수상', '우수상']);
       <div class="tl-head">
         <h2 class="section-title">연혁</h2>
         <div class="filters" role="group" aria-label="종류별 보기">
-          <button type="button" class="filter" data-filter="all" aria-pressed="true">전체</button>
+          <button type="button" class="filter" data-filter="all" aria-pressed="true">전체 <span class="count">{rows.length}</span></button>
           {Object.entries(kinds).map(([k, v]) => (
-            <button type="button" class="filter" data-filter={k} aria-pressed="false">{v}</button>
+            <button type="button" class="filter" data-filter={k} aria-pressed="false">
+              <span class="kind-dot" data-kind={k} aria-hidden="true"></span>{v} <span class="count">{counts[k]}</span>
+            </button>
           ))}
         </div>
       </div>
-      <p class="hint">줄을 누르면 요약이 열리고, 자세히 보기를 누르면 문제 정의부터 결과까지 전체 내용을 볼 수 있습니다.</p>
+      <p class="hint">줄을 누르면 요약이 열립니다. 자세히 보기가 있는 항목은 문제 정의부터 결과까지 전체 내용을 볼 수 있습니다.</p>
 
       <div class="timeline" data-filterable>
         {years.map((y) => (
@@ -87,10 +98,18 @@ const strong = new Set(['대상', '최우수상', '우수상']);
                         <div><dt>한 일</dt><dd>{r.brief.action}</dd></div>
                         <div><dt>결과</dt><dd>{r.brief.result}</dd></div>
                       </dl>
-                      {r.hasDetail && (
-                        <a class="more" href={`/projects/${r.project}/`} data-open={r.project}>
-                          {projects[r.project].title} 자세히 보기
-                        </a>
+                      {r.tags && <ul class="tags">{r.tags.map((t) => <li>{t}</li>)}</ul>}
+                      {(r.hasDetail || r.links) && (
+                        <p class="row-links">
+                          {r.hasDetail && (
+                            <a class="more" href={`/projects/${r.project}/`} data-open={r.project}>
+                              {projects[r.project].title} 자세히 보기
+                            </a>
+                          )}
+                          {r.links?.map((l) => (
+                            <a class="more ext" href={l.url} rel="noopener" target="_blank">{l.label}</a>
+                          ))}
+                        </p>
                       )}
                     </div>
                   )}
@@ -100,54 +119,6 @@ const strong = new Set(['대상', '최우수상', '우수상']);
           </section>
         ))}
       </div>
-
-      <section class="repos">
-        <div class="tl-head">
-          <h2 class="section-title">GitHub</h2>
-          <a class="section-link" href={profile.github} rel="noopener">전체 저장소 보기</a>
-        </div>
-        <p class="hint">직접 만들어 공개한 프로젝트들입니다. 줄을 누르면 요약과 저장소 링크가 열립니다.</p>
-        <div class="timeline">
-          {repoYears.map((y) => (
-            <section class="year">
-              <h3 class="year-label">{y}</h3>
-              <ol class="rows">
-                {repos.filter((r) => r.year === y).map((r, i) => {
-                  const id = `g${y}-${i}`;
-                  return (
-                    <li class="row expandable">
-                      <button type="button" class="row-head" aria-expanded="false" aria-controls={`${id}-body`}>
-                        <span class="row-month">{r.month}월</span>
-                        <span class="row-main">
-                          <span class="row-title">{r.title}</span>
-                          <span class="row-org">{r.subtitle}</span>
-                        </span>
-                        <span class="row-side">
-                          <span class="kind">{r.lang}</span>
-                          <span class="chev" aria-hidden="true"></span>
-                        </span>
-                      </button>
-                      <div class="row-body" id={`${id}-body`} hidden>
-                        <dl class="brief">
-                          <div><dt>문제</dt><dd>{r.brief.problem}</dd></div>
-                          <div><dt>한 일</dt><dd>{r.brief.action}</dd></div>
-                          <div><dt>결과</dt><dd>{r.brief.result}</dd></div>
-                        </dl>
-                        <ul class="tags">{r.tags.map((t) => <li>{t}</li>)}</ul>
-                        <p class="repo-links">
-                          {r.links.map((l) => (
-                            <a class="more" href={l.url} rel="noopener" target="_blank">{l.label}</a>
-                          ))}
-                        </p>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ol>
-            </section>
-          ))}
-        </div>
-      </section>
 
       <section class="skills">
         <h2 class="section-title">기술</h2>

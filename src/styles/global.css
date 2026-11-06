@@ -12,6 +12,13 @@
   --sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
   --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
   --w: 780px;
+
+  /* 연혁 종류별 색: 배경(k)과 왼쪽 띠, 필터 표시(d) */
+  --k-project: #edf1f7;  --d-project: #5b74a8;
+  --k-award: #f6f0e2;    --d-award: #b08a3e;
+  --k-patent: #ebf3ec;   --d-patent: #5d8a63;
+  --k-contest: #f3edf5;  --d-contest: #8a6a9c;
+  --k-github: #efefeb;   --d-github: #77776f;
 }
 
 /* 다크 테마: head의 스크립트가 data-theme을 정한다. 스크립트가 꺼져 있으면 시스템 설정을 따른다. */
@@ -26,6 +33,11 @@
   --accent: #93abe6;
   --accent-tint: #1d2333;
   --scrim: rgba(0, 0, 0, 0.5);
+  --k-project: #1a2029;  --d-project: #7f98cf;
+  --k-award: #252117;    --d-award: #c9a25a;
+  --k-patent: #18231b;   --d-patent: #7fae86;
+  --k-contest: #231d28;  --d-contest: #ad8cbf;
+  --k-github: #1f2020;   --d-github: #9b9b95;
   color-scheme: dark;
 }
 :root[data-theme='light'] { color-scheme: light; }
@@ -41,6 +53,11 @@
     --accent: #93abe6;
     --accent-tint: #1d2333;
     --scrim: rgba(0, 0, 0, 0.5);
+    --k-project: #1a2029;  --d-project: #7f98cf;
+    --k-award: #252117;    --d-award: #c9a25a;
+    --k-patent: #18231b;   --d-patent: #7fae86;
+    --k-contest: #231d28;  --d-contest: #ad8cbf;
+    --k-github: #1f2020;   --d-github: #9b9b95;
   }
 }
 
@@ -172,6 +189,20 @@ h1 {
 }
 .filter:hover { color: var(--text); }
 .filter[aria-pressed='true'] { color: var(--text); border-color: var(--line); background: var(--bg-raise); }
+.filter .count { margin-left: 2px; font-family: var(--mono); font-size: 0.72rem; color: var(--faint); }
+.kind-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 2px;
+  vertical-align: 0.05em;
+}
+.kind-dot[data-kind='project'] { background: var(--d-project); }
+.kind-dot[data-kind='award'] { background: var(--d-award); }
+.kind-dot[data-kind='patent'] { background: var(--d-patent); }
+.kind-dot[data-kind='contest'] { background: var(--d-contest); }
+.kind-dot[data-kind='github'] { background: var(--d-github); }
 .hint { margin: 8px 0 20px; font-size: 0.85rem; color: var(--faint); }
 
 .year {
@@ -181,7 +212,7 @@ h1 {
 }
 .year-label {
   margin: 0;
-  padding-top: 14px;
+  padding-top: 20px;
   font-family: var(--mono);
   font-size: 0.95rem;
   font-weight: 600;
@@ -189,26 +220,43 @@ h1 {
   position: sticky;
   top: 12px;
 }
-.rows { list-style: none; margin: 0; padding: 0; }
-.row { border-bottom: 1px solid var(--line); transition: background-color 0.15s; }
-.row:last-child { border-bottom: 0; }
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 10px 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.row {
+  --row-bg: var(--k-github);
+  --row-bar: var(--d-github);
+  background: var(--row-bg);
+  box-shadow: inset 3px 0 0 var(--row-bar);
+  border-radius: 4px;
+  transition: background-color 0.15s, box-shadow 0.15s;
+}
+.row[data-kind='project'] { --row-bg: var(--k-project); --row-bar: var(--d-project); }
+.row[data-kind='award'] { --row-bg: var(--k-award); --row-bar: var(--d-award); }
+.row[data-kind='patent'] { --row-bg: var(--k-patent); --row-bar: var(--d-patent); }
+.row[data-kind='contest'] { --row-bg: var(--k-contest); --row-bar: var(--d-contest); }
 
 .row-head {
   display: grid;
-  grid-template-columns: 44px 1fr auto;
+  grid-template-columns: 56px 1fr auto;
   gap: 12px;
   align-items: baseline;
   width: 100%;
-  padding: 14px 8px 13px 0;
+  padding: 12px 12px 11px 0;
   background: none;
   border: 0;
   text-align: left;
 }
 button.row-head { cursor: pointer; }
-.row.expandable:hover, .row.open { background: var(--hover); }
-.row.linked { background: var(--accent-tint); }
+.row.expandable:hover, .row.open { background: color-mix(in srgb, var(--row-bg), var(--text) 5%); }
+.row.linked { box-shadow: inset 3px 0 0 var(--row-bar), 0 0 0 1px var(--accent); }
 
-.row-month { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); padding-left: 4px; }
+.row-month { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); padding-left: 14px; }
 .row-main { display: flex; flex-direction: column; min-width: 0; }
 .row-title { font-weight: 600; line-height: 1.5; }
 .row-org { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
@@ -230,7 +278,7 @@ button.row-head { cursor: pointer; }
 .row.open .chev { transform: rotate(-135deg); margin-bottom: -2px; }
 .chev.none { border-color: transparent; }
 
-.row-body { padding: 2px 8px 20px 56px; }
+.row-body { padding: 2px 14px 18px 68px; }
 .brief { margin: 0; }
 .brief div { display: grid; grid-template-columns: 52px 1fr; gap: 8px; padding: 3px 0; }
 .brief dt { font-size: 0.8rem; color: var(--muted); padding-top: 2px; }
@@ -245,12 +293,9 @@ button.row-head { cursor: pointer; }
   border-bottom: 1px solid currentColor;
 }
 
-/* ---------- GitHub ---------- */
-.repos { margin-top: 72px; }
-.section-link { font-size: 0.82rem; color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); }
-.section-link:hover { color: var(--text); border-color: var(--text); }
 .row-body .tags { margin-top: 14px; }
-.repo-links { display: flex; flex-wrap: wrap; gap: 18px; margin: 0; }
+.row-body .tags li { background: var(--bg); }
+.row-links { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0; }
 .detail-meta dd a { color: var(--accent); margin-right: 14px; }
 
 /* ---------- 기술 ---------- */
@@ -452,10 +497,11 @@ kbd {
   .stats div + div { padding-left: 0; border-left: 0; }
   .year { grid-template-columns: 1fr; }
   .year-label { position: static; padding: 12px 0 2px; }
-  .row-head { grid-template-columns: 40px 1fr; row-gap: 2px; }
+  .row-head { grid-template-columns: 48px 1fr; row-gap: 2px; }
+  .row-month { padding-left: 12px; }
   .row-side { grid-column: 2; }
   .badge { text-align: left; min-width: 0; }
-  .row-body { padding-left: 52px; }
+  .row-body { padding-left: 60px; padding-right: 12px; }
   .skill-group { grid-template-columns: 1fr; gap: 2px; }
   .panel .detail { padding: 24px 20px 56px; }
   .detail-title { font-size: 1.6rem; }
