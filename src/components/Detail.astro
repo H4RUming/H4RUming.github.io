@@ -44,3 +44,12 @@ const H = headingLevel;
     {p.tags.map((t) => <li>{t}</li>)}
   </ul>
 </section>
+
+{p.retro && (
+  <section class="detail-sec">
+    <h3 class="sec-label"><span>04</span>돌아보기</h3>
+    <ul class="plain">
+      {p.retro.map((t) => <li>{t}</li>)}
+    </ul>
+  </section>
+)}

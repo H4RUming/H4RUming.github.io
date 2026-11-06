@@ -23,6 +23,7 @@ export const kinds = {
   project: '프로젝트',
   award: '수상',
   patent: '특허',
+  contest: '대회',
 };
 
 // month: null 이면 월 미표기
@@ -37,6 +38,26 @@ export const timeline = [
     project: 'recallframe',
   },
   {
+    year: 2026, month: null, kind: 'contest',
+    title: 'SK하이닉스 AI 해커톤 2026',
+    org: '기초 지식 테스트와 AI 활용 문제 풀이 예선',
+    badge: '1차 예선 통과',
+  },
+  {
+    year: 2026, month: null, kind: 'project',
+    title: 'SYNAPSE',
+    org: '보행자 행동 예측 교통사고 예방 AI, 2026 캡스톤디자인 페스티벌',
+    badge: '팀장',
+    project: 'synapse',
+  },
+  {
+    year: 2026, month: 7, kind: 'contest',
+    title: '2026 SW중심대학 디지털 경진대회 AI부문',
+    org: 'DACON, AI 코딩 에이전트 다음 행동 예측, 팀장',
+    badge: '예선 30위',
+    project: 'dacon-agent',
+  },
+  {
     year: 2026, month: 7, kind: 'patent',
     title: '회상치료를 지원하는 온디바이스 화상대화 장치 및 그 방법',
     org: '특허 출원 10-2026-0127005',
@@ -47,13 +68,6 @@ export const timeline = [
       action: '가족의 얼굴과 목소리로 대화하는 온디바이스 화상대화 방법을 고안했다.',
       result: '2026년 7월 10일 출원, 심사청구 완료 (한라대학교 산학협력단).',
     },
-  },
-  {
-    year: 2026, month: null, kind: 'project',
-    title: 'SYNAPSE',
-    org: '보행자 행동 예측 교통사고 예방 AI, 2026 캡스톤디자인 페스티벌',
-    badge: '팀장',
-    project: 'synapse',
   },
   {
     year: 2025, month: 11, kind: 'award',
@@ -91,6 +105,58 @@ export const timeline = [
 ];
 
 export const projects = {
+  'dacon-agent': {
+    title: '코딩 에이전트 다음 행동 예측',
+    subtitle: '대화 이력과 작업 상태로 AI 코딩 에이전트의 다음 행동 14종을 맞히는 분류 모델',
+    period: '2026 (예선 마감 7월)',
+    context: '2026 SW중심대학 디지털 경진대회 AI부문, DACON',
+    role: '팀장, 모델링과 추론 최적화',
+    team: '팀 참가',
+    brief: {
+      problem: '오프라인 T4 GPU에서 3만 건을 10분 안에 추론해야 하는 제약 아래, 코딩 에이전트의 다음 행동 14종을 분류해야 했다.',
+      action: '문맥을 압축하지 않는 입력 구조로 바꾸고, 증류 모델과 일반 모델을 int8로 양자화해 앙상블했다.',
+      result: '예선 30위 (Macro-F1 0.79100), T4 추론 6분 19초. 리더보드에서 가장 먼저 0.79를 넘겨 약 이틀간 1위를 지켰다.',
+    },
+    problem: [
+      '대화 이력, 워크스페이스 상태, 현재 사용자 발화를 보고 AI 코딩 에이전트가 다음에 할 행동을 14개 중 하나로 맞히는 과제다. 평가는 Macro-F1.',
+      '코드와 모델을 그대로 제출하는 방식이라 추론 환경 제약을 그대로 받는다. T4 16GB, 오프라인, 추론 10분 이내, 압축 파일 1GB 이하.',
+      'train은 7만 건(9,429세션)이고, 같은 세션의 step끼리 문맥을 공유해서 무작위로 나누면 검증 점수가 부풀려진다.',
+    ],
+    action: {
+      intro: '정확도와 추론 시간을 같이 맞춰야 하는 문제라서, 모든 후보를 T4 10분 안에 들어가는지부터 확인하고 그 안에서 점수를 올렸다. 리더보드에 맞춘 반복 튜닝은 쓰지 않았다. 모든 계수를 학습 데이터 검증 결과에서 뽑아서, 저장소 스크립트를 실행하면 최종 제출물이 그대로 다시 나온다.',
+      points: [
+        '대화 이력을 요약해 512토큰에 맞추던 방식을 버리고 전체 이력을 시간순으로 넣었다. 리더보드 점수가 0.6639에서 0.7797로 올랐다.',
+        '세션 단위로 묶은 5-fold 검증을 기본으로 두고, 학습 코드와 제출 코드의 입력 직렬화가 글자 단위로 같은지 검사하는 절차를 만들었다.',
+        '4개 teacher의 soft label로 mmBERT-base를 증류한 모델과 일반 학습 모델을 logit 평균으로 묶었다. 증류 비율을 올리면 검증 점수는 오르는데 리더보드 점수와의 차이가 사라지는 현상을 제출로 실측했고, 원인이 soft label 누적 노출량이라는 걸 찾았다.',
+        '모델 구조마다 로컬과 T4의 속도 비가 다르다는 걸 제출로 실측해(mmBERT 6배, EuroBERT 7.7배) 시간 초과할 후보를 미리 거르는 기준으로 썼다.',
+        '검증 점수와 리더보드의 차이를 추적하다가 train은 step 단위, test는 세션당 1 step이라는 샘플링 차이를 찾았다. 이 기준으로 다시 맞춘 클래스별 bias가 +0.0002를 낼 거라 예측했고, 실제 리더보드도 정확히 +0.0002 올랐다.',
+        '디코더 LLM 분류에서 두 모델이 같은 점수대로 실패하는 걸 보고 셋업 결함을 의심했다. 왼쪽 패딩인데 오른쪽 패딩을 가정한 풀링이 원인이었고, 고친 뒤 0.2638에서 0.7640으로 정상화했다.',
+      ],
+      pipeline: [
+        { name: '입력 직렬화', tech: '4구획, max_len 640', detail: '현재 발화, 작업 상태(CI, git, 열린 파일 수, 턴 등), 열린 파일 목록, 전체 이력을 4구획으로 넣는다. 이력은 요약하거나 압축하지 않는다. 토큰 길이 p99를 실측해 640으로 정했고, 잘리는 샘플은 5건이다.', mine: true },
+        { name: '모델 A 증류', tech: 'mmBERT-base 307M', detail: '4개 teacher의 OOF 평균 soft label로 증류했다. α 0.3, T 2.0, 3 epoch, lr 4e-5.', mine: true },
+        { name: '모델 B', tech: 'mmBERT-base, seed 43', detail: 'hard label로 전량 학습했다. 두 모델의 확률을 logit 공간에서 평균한다.', mine: true },
+        { name: 'bias 보정', tech: 'coordinate ascent', detail: '클래스별 bias 14개를 ±0.5 범위, 41칸 격자로 탐색한다. 최종본은 세션당 1 step을 뽑는 세션 균등 평가 기준으로 맞췄다.', mine: true },
+        { name: 'int8 추론', tech: 'per-channel, batch 256', detail: '모델당 308MB로 줄이고, 길이 순으로 정렬한 배치로 추론한다. T4에서 6분 19초.', mine: true },
+      ],
+    },
+    results: [
+      { value: '0.79100', label: '예선 Macro-F1 (최종 30위)' },
+      { value: '6분 19초', label: 'T4 추론 시간 (제한 10분)' },
+      { value: '308MB', label: 'int8 양자화 후 모델당 크기' },
+      { value: '+0.0002', label: '분포 보정 예측 이득, 실제 리더보드와 일치' },
+      { value: '0.7640', label: 'LLM 분류 풀링 버그 수정 후 (수정 전 0.2638)' },
+      { value: '약 이틀', label: '리더보드 1위 유지 (가장 먼저 0.79 돌파)' },
+    ],
+    retro: [
+      '대회가 끝난 뒤 1등 팀(0.7988)의 공개 코드와 비교했다. 차이는 리더보드 튜닝이 아니라 입력 표현과 추론 엔지니어링이었다.',
+      '1등 팀은 결정 변수를 특수 토큰으로 바꾸고 대회 텍스트로 MLM 이어학습(TAPT)을 했다. 나는 특수 토큰을 TAPT 없이 한 번 시도하고 실패하자 그 방향을 접었다.',
+      '추론도 int8 2모델에서 멈췄다. 1등 팀은 small 모델 8개를 base와 delta로 압축하고 early-exit, 토큰 예산 기반 동적 배칭, CPU와 GPU 병렬 처리로 5분 14초에 돌렸다.',
+      '그래서 원칙 하나를 세웠다. 한 방향을 접기 전에 그 방향의 표준 레시피를 끝까지 채웠는지 확인하고, 실패한 실험 한 번으로 폐기하지 않는다.',
+    ],
+    tags: ['Knowledge Distillation', 'INT8 Quantization', 'mmBERT', 'Ensemble', 'Inference Optimization', 'T4'],
+  },
+
   recallframe: {
     title: 'RecallFrame',
     subtitle: '기억 속 가족의 얼굴로 대화하는 온디바이스 화상대화 액자',
@@ -315,7 +381,7 @@ export const repos = [
 ];
 
 export const skills = [
-  { group: 'AI / ML', items: ['PyTorch', 'YOLOv8', 'ByteTrack', 'GNN', 'Mixture of Experts', 'Multimodal LLM', 'RAG', 'FAISS', 'TTS', 'Quantization'] },
+  { group: 'AI / ML', items: ['PyTorch', 'YOLOv8', 'ByteTrack', 'GNN', 'Mixture of Experts', 'Multimodal LLM', 'RAG', 'FAISS', 'TTS', 'Knowledge Distillation', 'INT8 Quantization'] },
   { group: 'LLM Serving', items: ['vLLM', 'FP8 KV Cache', 'Speculative Decoding', 'systemd'] },
   { group: 'Backend', items: ['Python', 'FastAPI'] },
   { group: 'Apple', items: ['Swift', 'SwiftUI', 'Core ML'] },
