@@ -1,0 +1,129 @@
+---
+import Base from '../layouts/Base.astro';
+import Detail from '../components/Detail.astro';
+import { profile, stats, kinds, timeline, projects, skills } from '../data/content.js';
+
+const years = [...new Set(timeline.map((t) => t.year))].sort((a, b) => b - a);
+const rows = timeline.map((t, i) => {
+  const proj = t.project ? projects[t.project] : null;
+  const brief = t.brief ?? proj?.brief ?? null;
+  return { ...t, id: `r${i}`, brief, hasDetail: Boolean(proj) };
+});
+const strong = new Set(['대상', '최우수상', '우수상']);
+---
+<Base title={`${profile.name} · Portfolio`}>
+  <div class="wrap">
+    <header class="intro">
+      <div class="intro-top">
+        <h1>{profile.name}<span class="name-en">{profile.nameEn}</span></h1>
+        <nav class="links" aria-label="연락처">
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+          <a href={profile.github} rel="noopener">GitHub</a>
+        </nav>
+      </div>
+      <p class="affil">{profile.affiliation}</p>
+      <p class="tagline">{profile.tagline}</p>
+      <dl class="stats">
+        {stats.map((s) => (
+          <div><dt>{s.label}</dt><dd>{s.value}</dd></div>
+        ))}
+      </dl>
+    </header>
+
+    <main>
+      <div class="tl-head">
+        <h2 class="section-title">연혁</h2>
+        <div class="filters" role="group" aria-label="종류별 보기">
+          <button type="button" class="filter" data-filter="all" aria-pressed="true">전체</button>
+          {Object.entries(kinds).map(([k, v]) => (
+            <button type="button" class="filter" data-filter={k} aria-pressed="false">{v}</button>
+          ))}
+        </div>
+      </div>
+      <p class="hint">줄을 누르면 요약이, ‘자세히’를 누르면 문제 정의부터 결과까지 전체 내용이 열립니다.</p>
+
+      <div class="timeline">
+        {years.map((y) => (
+          <section class="year" data-year={y}>
+            <h3 class="year-label">{y}</h3>
+            <ol class="rows">
+              {rows.filter((r) => r.year === y).map((r) => (
+                <li class:list={['row', { expandable: r.brief }]} data-kind={r.kind} data-rel={r.project ?? ''}>
+                  {r.brief ? (
+                    <button type="button" class="row-head" aria-expanded="false" aria-controls={`${r.id}-body`}>
+                      <span class="row-month">{r.month ? String(r.month).padStart(2, '0') : '—'}</span>
+                      <span class="row-main">
+                        <span class="row-title">{r.title}</span>
+                        <span class="row-org">{r.org}</span>
+                      </span>
+                      <span class="row-side">
+                        <span class="kind">{kinds[r.kind]}</span>
+                        <span class:list={['badge', { strong: strong.has(r.badge) }]}>{r.badge}</span>
+                        <span class="chev" aria-hidden="true"></span>
+                      </span>
+                    </button>
+                  ) : (
+                    <div class="row-head static">
+                      <span class="row-month">{r.month ? String(r.month).padStart(2, '0') : '—'}</span>
+                      <span class="row-main">
+                        <span class="row-title">{r.title}</span>
+                        <span class="row-org">{r.org}</span>
+                      </span>
+                      <span class="row-side">
+                        <span class="kind">{kinds[r.kind]}</span>
+                        <span class:list={['badge', { strong: strong.has(r.badge) }]}>{r.badge}</span>
+                        <span class="chev none" aria-hidden="true"></span>
+                      </span>
+                    </div>
+                  )}
+                  {r.brief && (
+                    <div class="row-body" id={`${r.id}-body`} hidden>
+                      <dl class="brief">
+                        <div><dt>문제</dt><dd>{r.brief.problem}</dd></div>
+                        <div><dt>한 일</dt><dd>{r.brief.action}</dd></div>
+                        <div><dt>결과</dt><dd>{r.brief.result}</dd></div>
+                      </dl>
+                      {r.hasDetail && (
+                        <a class="more" href={`/projects/${r.project}/`} data-open={r.project}>
+                          {projects[r.project].title} 자세히 보기 <span aria-hidden="true">→</span>
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))}
+      </div>
+
+      <section class="skills">
+        <h2 class="section-title">기술</h2>
+        {skills.map((g) => (
+          <div class="skill-group">
+            <h3>{g.group}</h3>
+            <p>{g.items.join(' · ')}</p>
+          </div>
+        ))}
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p>© {new Date().getFullYear()} {profile.name}</p>
+    </footer>
+  </div>
+
+  <div class="scrim" data-scrim hidden></div>
+  <aside class="panel" data-panel role="dialog" aria-modal="true" aria-label="프로젝트 상세" hidden>
+    <div class="panel-bar">
+      <button type="button" class="panel-close" data-close>닫기 <kbd>Esc</kbd></button>
+    </div>
+    {Object.entries(projects).map(([slug, p]) => (
+      <article class="detail" data-detail={slug} hidden>
+        <Detail slug={slug} p={p} />
+      </article>
+    ))}
+  </aside>
+
+  <script>import '../scripts/interactions.js';</script>
+</Base>

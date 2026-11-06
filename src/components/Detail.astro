@@ -1,0 +1,43 @@
+---
+import Pipeline from './Pipeline.astro';
+const { slug, p, headingLevel = 'h2' } = Astro.props;
+const H = headingLevel;
+---
+<header class="detail-head">
+  <p class="detail-context">{p.context}</p>
+  <H class="detail-title" id={`title-${slug}`} tabindex="-1">{p.title}</H>
+  <p class="detail-sub">{p.subtitle}</p>
+  <dl class="detail-meta">
+    <div><dt>기간</dt><dd>{p.period}</dd></div>
+    <div><dt>역할</dt><dd>{p.role}</dd></div>
+    <div><dt>팀</dt><dd>{p.team}</dd></div>
+  </dl>
+</header>
+
+<section class="detail-sec">
+  <h3 class="sec-label"><span>01</span>문제 정의</h3>
+  <ul class="plain">
+    {p.problem.map((t) => <li>{t}</li>)}
+  </ul>
+</section>
+
+<section class="detail-sec">
+  <h3 class="sec-label"><span>02</span>그래서 한 일</h3>
+  <p>{p.action.intro}</p>
+  <Pipeline steps={p.action.pipeline} id={`pipe-${slug}`} />
+  <ul class="plain">
+    {p.action.points.map((t) => <li>{t}</li>)}
+  </ul>
+</section>
+
+<section class="detail-sec">
+  <h3 class="sec-label"><span>03</span>결과</h3>
+  <dl class="results">
+    {p.results.map((r) => (
+      <div><dt>{r.value}</dt><dd>{r.label}</dd></div>
+    ))}
+  </dl>
+  <ul class="tags">
+    {p.tags.map((t) => <li>{t}</li>)}
+  </ul>
+</section>
