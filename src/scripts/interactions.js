@@ -171,3 +171,52 @@ $$('[data-theme-set]').forEach((b) => {
 media.addEventListener('change', () => {
   if (!readSaved()) applyTheme(sysTheme());
 });
+
+/* ---------- 7. 상장, 포스터 뷰어 ---------- */
+const viewer = $('[data-viewer]');
+if (viewer) {
+  const img = $('[data-viewer-img]', viewer);
+  const cap = $('[data-viewer-caption]', viewer);
+  const openLink = $('[data-viewer-open]', viewer);
+  const closeBtn = $('[data-viewer-close]', viewer);
+  let viewerReturn = null;
+
+  const openViewer = (src, caption, from) => {
+    viewerReturn = from;
+    img.src = src;
+    img.alt = caption;
+    cap.textContent = caption;
+    openLink.href = src;
+    viewer.hidden = false;
+    document.documentElement.classList.add('viewer-open');
+    void viewer.offsetWidth;
+    viewer.classList.add('in');
+    closeBtn.focus({ preventScroll: true });
+  };
+  const closeViewer = () => {
+    viewer.classList.remove('in');
+    viewer.hidden = true;
+    img.removeAttribute('src');
+    document.documentElement.classList.remove('viewer-open');
+    viewerReturn?.focus({ preventScroll: true });
+  };
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-view]');
+    if (!btn) return;
+    e.preventDefault();
+    openViewer(btn.dataset.view, btn.dataset.caption || '', btn);
+  });
+  closeBtn.addEventListener('click', closeViewer);
+  // 이미지 밖(어두운 배경)을 누르면 닫기
+  $('[data-viewer-stage]', viewer).addEventListener('click', (e) => {
+    if (e.target !== img) closeViewer();
+  });
+  // 상세 패널 위에서 열렸을 때 Esc가 패널까지 닫지 않도록 먼저 가로챈다
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !viewer.hidden) {
+      e.stopImmediatePropagation();
+      closeViewer();
+    }
+  }, true);
+}

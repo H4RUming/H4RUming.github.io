@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Detail from '../components/Detail.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import DocLinks from '../components/DocLinks.astro';
 import { profile, stats, kinds, timeline, projects, skills } from '../data/content.js';
 
 // 연도 내림차순, 같은 해에서는 월이 없는 항목을 맨 위에 두고 월 내림차순. 같은 값이면 데이터 순서 유지.
@@ -14,9 +15,12 @@ const rows = timeline
       id: `r${i}`,
       brief: t.brief ?? proj?.brief ?? null,
       links: t.links ?? proj?.links ?? null,
+      // 줄 자체 자료 + 연결된 프로젝트 자료 (같은 파일은 한 번만)
+      docs: [...(t.docs ?? []), ...(proj?.docs ?? [])].filter((d, j, arr) => arr.findIndex((x) => x.src === d.src) === j),
       hasDetail: Boolean(proj),
     };
   })
+  .map((r) => ({ ...r, expandable: Boolean(r.brief || r.docs.length) }))
   .sort((a, b) => b.year - a.year || monthKey(b.month) - monthKey(a.month));
 
 const years = [...new Set(rows.map((r) => r.year))];
@@ -55,7 +59,7 @@ const strong = new Set(['대상', '최우수상', '우수상']);
           ))}
         </div>
       </div>
-      <p class="hint">줄을 누르면 요약이 열립니다. 자세히 보기가 있는 항목은 문제 정의부터 결과까지 전체 내용을 볼 수 있습니다.</p>
+      <p class="hint">줄을 누르면 요약과 상장, 발표자료가 열립니다. 자세히 보기가 있는 항목은 문제 정의부터 결과까지 전체 내용을 볼 수 있습니다.</p>
 
       <div class="timeline" data-filterable>
         {years.map((y) => (
@@ -63,8 +67,8 @@ const strong = new Set(['대상', '최우수상', '우수상']);
             <h3 class="year-label">{y}</h3>
             <ol class="rows">
               {rows.filter((r) => r.year === y).map((r) => (
-                <li class:list={['row', { expandable: r.brief }]} data-kind={r.kind} data-rel={r.project ?? ''}>
-                  {r.brief ? (
+                <li class:list={['row', { expandable: r.expandable }]} data-kind={r.kind} data-rel={r.project ?? ''}>
+                  {r.expandable ? (
                     <button type="button" class="row-head" aria-expanded="false" aria-controls={`${r.id}-body`}>
                       <span class="row-month">{r.month ? `${r.month}월` : ''}</span>
                       <span class="row-main">
@@ -91,13 +95,21 @@ const strong = new Set(['대상', '최우수상', '우수상']);
                       </span>
                     </div>
                   )}
-                  {r.brief && (
+                  {r.expandable && (
                     <div class="row-body" id={`${r.id}-body`} hidden>
-                      <dl class="brief">
-                        <div><dt>문제</dt><dd>{r.brief.problem}</dd></div>
-                        <div><dt>한 일</dt><dd>{r.brief.action}</dd></div>
-                        <div><dt>결과</dt><dd>{r.brief.result}</dd></div>
-                      </dl>
+                      {r.brief && (
+                        <dl class="brief">
+                          <div><dt>문제</dt><dd>{r.brief.problem}</dd></div>
+                          <div><dt>한 일</dt><dd>{r.brief.action}</dd></div>
+                          <div><dt>결과</dt><dd>{r.brief.result}</dd></div>
+                        </dl>
+                      )}
+                      {r.docs.length > 0 && (
+                        <div class="row-docs">
+                          <span class="row-docs-label">자료</span>
+                          <DocLinks docs={r.docs} caption={r.title} />
+                        </div>
+                      )}
                       {r.tags && <ul class="tags">{r.tags.map((t) => <li>{t}</li>)}</ul>}
                       {(r.hasDetail || r.links) && (
                         <p class="row-links">

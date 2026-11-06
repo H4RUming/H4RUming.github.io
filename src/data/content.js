@@ -19,6 +19,22 @@ export const stats = [
   { label: '팀장 프로젝트', value: 2 },
 ];
 
+// 증빙 자료 (public/docs). image는 화면 안 뷰어로, pdf는 새 탭으로 연다.
+// 발표자료는 블라인드 밑 원본이 남지 않도록 전 페이지를 이미지로 구운 공개본이다.
+const D = {
+  patent: { type: 'image', label: '출원번호통지서', src: '/docs/patent-filing-notice.jpg' },
+  certOnbi: { type: 'image', label: '상장', src: '/docs/award-2025-halla-grand-onbiit.jpg' },
+  certH100: { type: 'image', label: '상장', src: '/docs/award-2025-halla-excellence-h100.jpg' },
+  certArgos: { type: 'image', label: '상장', src: '/docs/award-2025-capstone-argos.jpg' },
+  certEsg: { type: 'image', label: '상장', src: '/docs/award-2025-esg-medicare.jpg' },
+  certTruthlens: { type: 'image', label: '상장', src: '/docs/award-2024-hlfutureday-truthlens.jpg' },
+  pipePoster: { type: 'image', label: '포스터', src: '/docs/pipe-robot-poster.jpg' },
+  recallDeck: { type: 'pdf', label: '발표자료', src: '/docs/recallframe-deck.pdf' },
+  synapseDeck: { type: 'pdf', label: '발표자료', src: '/docs/synapse-deck.pdf' },
+  medicareDeck: { type: 'pdf', label: '발표자료', src: '/docs/medicare-deck.pdf' },
+  truthlensDeck: { type: 'pdf', label: '발표자료', src: '/docs/truthlens-deck.pdf' },
+};
+
 export const kinds = {
   project: '프로젝트',
   award: '수상',
@@ -65,6 +81,7 @@ export const timeline = [
     title: '회상치료를 지원하는 온디바이스 화상대화 장치 및 그 방법',
     org: '특허 출원 10-2026-0127005',
     badge: '발명자',
+    docs: [D.patent],
     project: 'recallframe',
     brief: {
       problem: '치매 어르신의 회상치료를 일상에서 반복해 줄 사람이 없다.',
@@ -77,6 +94,7 @@ export const timeline = [
     title: '2025 한라인재페스티벌 산학협력프로젝트',
     org: '한라대학교 총장상, 온비IT 팀',
     badge: '대상',
+    docs: [D.certOnbi, D.pipePoster],
     project: 'pipe-robot',
   },
   {
@@ -84,12 +102,14 @@ export const timeline = [
     title: '2025 한라인재페스티벌 산학협력프로젝트',
     org: '한라대학교 SW중심대학사업단, H100 팀',
     badge: '최우수상',
+    docs: [D.certH100],
   },
   {
     year: 2025, month: 11, kind: 'award',
     title: '2025 캡스톤디자인 아이디어 경진대회',
     org: '한라대학교 공학교육혁신센터, ARGOS 팀',
     badge: '최우수상',
+    docs: [D.certArgos],
     project: 'synapse',
   },
   {
@@ -97,6 +117,7 @@ export const timeline = [
     title: 'HL D&I한라와 함께하는 한라대학교 ESG 아이디어 공모전',
     org: 'HAI_Medicare 팀',
     badge: '대상',
+    docs: [D.certEsg],
     project: 'medicare',
   },
   {
@@ -104,6 +125,7 @@ export const timeline = [
     title: '제10회 HL Future Day (Track III)',
     org: 'HL홀딩스, TruthLens',
     badge: '우수상',
+    docs: [D.certTruthlens, D.truthlensDeck],
   },
 
   // GitHub 공개 저장소
@@ -233,6 +255,7 @@ export const projects = {
     context: 'HL Future Day 2026 New Business Idea',
     role: '팀장, 발표, 특허 발명자',
     team: '4인 팀',
+    docs: [D.recallDeck, D.patent],
     brief: {
       problem: '경증 치매 어르신의 절반 이상이 혼자 살고, 회상치료를 반복해 줄 사람이 없다.',
       action: '사진 1장과 음성 5초로 가족의 얼굴과 목소리를 재현해 기기 안에서 대화하는 구조를 설계했다.',
@@ -274,6 +297,7 @@ export const projects = {
     context: '2026 캡스톤디자인 페스티벌, ARGOS 팀',
     role: '팀장, 아키텍처 설계, AI 학습, 백엔드와 대시보드',
     team: 'ARGOS 팀',
+    docs: [D.synapseDeck, D.certArgos],
     brief: {
       problem: '기존 ADAS는 거리와 속도를 보고 위험이 생긴 뒤에 개입해서 대응 시간이 부족하다.',
       action: '보행자의 자세와 시선으로 의도를 읽고 GNN으로 관계를 추론하는 파이프라인을 230달러짜리 엣지 장비에 올렸다.',
@@ -317,6 +341,7 @@ export const projects = {
     context: 'HL D&I한라와 함께하는 한라대학교 ESG 아이디어 공모전',
     role: '개발 (프론트엔드, 데이터 전처리, API 연동)',
     team: '5인 팀 (HAI_Medicare)',
+    docs: [D.medicareDeck, D.certEsg],
     links: [{ label: 'GitHub 저장소', url: 'https://github.com/H4RUming/HAI_Medicare' }],
     brief: {
       problem: '의료 취약 지역은 의사를 만나기 어렵고, 기존 헬스케어 챗봇은 범용 모델이라 전문성이 부족하다.',
@@ -358,6 +383,7 @@ export const projects = {
     context: '2025 한라인재페스티벌 산학협력프로젝트',
     role: '데이터 정제, 모델 학습',
     team: '6인 팀 (온비IT)',
+    docs: [D.pipePoster, D.certOnbi],
     brief: {
       problem: '노후 배관의 부식과 균열은 육안이나 카메라로는 정확히 진단하기 어렵다.',
       action: '로봇이 수집한 배관 영상을 정제해 학습 데이터로 만들고, 손상 3종 세그멘테이션 모델을 학습시켰다.',

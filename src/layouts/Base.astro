@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Viewer from '../components/Viewer.astro';
 const { title, description = '김용민 포트폴리오. 온디바이스와 엣지 환경에서 동작하는 AI 프로젝트 모음' } = Astro.props;
 ---
 <!doctype html>
@@ -25,5 +26,6 @@ const { title, description = '김용민 포트폴리오. 온디바이스와 엣�
   </head>
   <body>
     <slot />
+    <Viewer />
   </body>
 </html>

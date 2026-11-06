@@ -67,7 +67,7 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
 }
-html.panel-open { overflow: hidden; }
+html.panel-open, html.viewer-open { overflow: hidden; }
 
 body {
   margin: 0;
@@ -297,6 +297,72 @@ button.row-head { cursor: pointer; }
 .row-body .tags li { background: var(--bg); }
 .row-links { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0; }
 .detail-meta dd a { color: var(--accent); margin-right: 14px; }
+
+/* ---------- 증빙 자료 ---------- */
+.row-docs { display: flex; align-items: baseline; gap: 8px; margin-top: 12px; }
+.row-docs-label { width: 52px; flex: none; font-size: 0.8rem; color: var(--muted); }
+.row-body > .row-docs:first-child { margin-top: 4px; }
+.doc-links { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.doc {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 2px 10px;
+  font-size: 0.85rem;
+  color: var(--text);
+  text-decoration: none;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.doc:hover { border-color: var(--muted); }
+.doc-ext { font-family: var(--mono); font-size: 0.68rem; color: var(--faint); }
+.detail-meta .doc-links { vertical-align: baseline; }
+.detail-meta dd a.doc { color: var(--text); margin-right: 0; }
+
+.viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  background: rgba(14, 14, 13, 0.88);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.viewer.in { opacity: 1; }
+.viewer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #e7e7e3;
+  font-size: 0.88rem;
+}
+.viewer-actions { display: flex; align-items: center; gap: 18px; }
+.viewer-open { color: #b9b9b3; text-decoration: none; border-bottom: 1px solid #55554f; }
+.viewer-open:hover { color: #fff; }
+.viewer .panel-close { color: #b9b9b3; }
+.viewer .panel-close:hover { color: #fff; }
+.viewer kbd { border-color: #55554f; }
+.viewer-stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px 24px;
+  overflow: auto;
+}
+.viewer-stage img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  background: #fff;
+  box-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
+}
 
 /* ---------- 기술 ---------- */
 .skills { margin-top: 72px; }

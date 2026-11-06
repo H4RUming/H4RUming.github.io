@@ -1,0 +1,17 @@
+---
+// 증빙 자료 버튼. image는 화면 안 뷰어, pdf는 새 탭.
+const { docs = [], caption = '' } = Astro.props;
+---
+{docs.length > 0 && (
+  <span class="doc-links">
+    {docs.map((d) =>
+      d.type === 'image' ? (
+        <button type="button" class="doc" data-view={d.src} data-caption={caption ? `${caption}, ${d.label}` : d.label}>
+          {d.label}
+        </button>
+      ) : (
+        <a class="doc" href={d.src} target="_blank" rel="noopener">{d.label} <span class="doc-ext">PDF</span></a>
+      )
+    )}
+  </span>
+)}

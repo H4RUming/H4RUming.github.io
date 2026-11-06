@@ -1,5 +1,6 @@
 ---
 import Pipeline from './Pipeline.astro';
+import DocLinks from './DocLinks.astro';
 const { slug, p, headingLevel = 'h2' } = Astro.props;
 const H = headingLevel;
 ---
@@ -13,6 +14,9 @@ const H = headingLevel;
     <div><dt>팀</dt><dd>{p.team}</dd></div>
     {p.links && (
       <div><dt>링크</dt><dd>{p.links.map((l) => <a href={l.url} rel="noopener" target="_blank">{l.label}</a>)}</dd></div>
+    )}
+    {p.docs && (
+      <div><dt>자료</dt><dd><DocLinks docs={p.docs} caption={p.title} /></dd></div>
     )}
   </dl>
 </header>

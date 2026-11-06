@@ -1,0 +1,15 @@
+---
+// 상장, 포스터 같은 이미지 자료를 크게 보여주는 화면 안 뷰어
+---
+<div class="viewer" data-viewer role="dialog" aria-modal="true" aria-label="자료 보기" hidden>
+  <div class="viewer-bar">
+    <span class="viewer-caption" data-viewer-caption></span>
+    <span class="viewer-actions">
+      <a class="viewer-open" data-viewer-open href="#" target="_blank" rel="noopener">원본 크기로 열기</a>
+      <button type="button" class="panel-close" data-viewer-close>닫기 <kbd>Esc</kbd></button>
+    </span>
+  </div>
+  <div class="viewer-stage" data-viewer-stage>
+    <img data-viewer-img alt="" />
+  </div>
+</div>
