@@ -16,7 +16,7 @@ export const stats = [
   { label: '대상', value: 2 },
   { label: '최우수상', value: 2 },
   { label: '우수상', value: 2 },
-  { label: '팀장 프로젝트', value: 2 },
+  { label: '팀장 프로젝트', value: 3 },
 ];
 
 // 증빙 자료 (public/docs). image는 화면 안 뷰어로, pdf는 새 탭으로 연다.
@@ -55,7 +55,7 @@ export const timeline = [
     title: 'RecallFrame',
     org: 'HL Future Day 2026 New Business Idea',
     badge: '팀장',
-    desc: '기억 속 가족의 얼굴과 목소리로 대화하는 온디바이스 화상대화 액자. 사진 1장과 음성 5초로 가족을 등록하고, 모든 처리를 태블릿 안에서 수행.',
+    desc: '실제 가족의 얼굴과 목소리로 대화하는 온디바이스 화상대화 액자. 사진 1장과 음성 5초로 가족을 등록하고, 모든 처리를 태블릿 안에서 수행.',
     metrics: [
       { value: '21fps', label: '얼굴 합성' },
       { value: '0.4초', label: '음성 합성 지연' },
@@ -314,7 +314,7 @@ export const projects = {
 
   recallframe: {
     title: 'RecallFrame',
-    subtitle: '기억 속 가족의 얼굴로 대화하는 온디바이스 화상대화 액자',
+    subtitle: '실제 가족의 얼굴과 목소리로 대화하는 온디바이스 화상대화 액자',
     period: '2026',
     context: 'HL Future Day 2026 New Business Idea',
     role: '팀장, 발표, 특허 발명자',
@@ -352,6 +352,7 @@ export const projects = {
       { value: '사진 1장, 음성 5초', label: '가족 등록에 필요한 입력' },
       { value: '우수상', label: '2026 Halla Future Day 최종 심사 (2위)' },
     ],
+    resultsNote: '얼굴 합성 21fps와 음성 합성 지연 0.4초는 Snapdragon 8 Elite 태블릿에서 기기 최적화 전 측정한 값.',
     tags: ['On-Device AI', 'Multimodal LLM', 'RAG', 'FAISS', 'Voice Cloning', 'Talking Head'],
   },
 

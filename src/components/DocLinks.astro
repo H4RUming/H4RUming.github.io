@@ -6,9 +6,9 @@ const { docs = [], caption = '' } = Astro.props;
   <span class="doc-links">
     {docs.map((d) =>
       d.type === 'image' ? (
-        <button type="button" class="doc" data-view={d.src} data-caption={caption ? `${caption}, ${d.label}` : d.label}>
+        <a class="doc" href={d.src} target="_blank" rel="noopener" data-view={d.src} data-caption={caption ? `${caption}, ${d.label}` : d.label}>
           {d.label}
-        </button>
+        </a>
       ) : (
         <a class="doc" href={d.src} target="_blank" rel="noopener">{d.label} <span class="doc-ext">PDF</span></a>
       )

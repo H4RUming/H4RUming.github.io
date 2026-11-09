@@ -44,6 +44,7 @@ const H = headingLevel;
       <div><dt>{r.value}</dt><dd>{r.label}</dd></div>
     ))}
   </dl>
+  {p.resultsNote && <p class="results-note">{p.resultsNote}</p>}
   <ul class="tags">
     {p.tags.map((t) => <li>{t}</li>)}
   </ul>
