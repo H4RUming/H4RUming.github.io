@@ -67,7 +67,7 @@ export const timeline = [
     year: 2026, month: null, kind: 'contest',
     title: 'SK하이닉스 AI 해커톤 2026',
     org: 'SK하이닉스',
-    desc: '기초 지식 테스트와 AI 활용 문제 풀이 예선.',
+    desc: '기초 지식 테스트와 AI 활용 문제 풀이 예선. 1차 예선 통과, 2차 예선에서 탈락해 본선 미진출.',
     badge: '1차 예선 통과',
   },
   {
