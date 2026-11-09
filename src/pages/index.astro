@@ -92,7 +92,7 @@ const strong = new Set(['대상', '최우수상', '우수상']);
                     {r.expandable && (
                       <div class="row-body" id={`${r.id}-body`} hidden>
                         <dl class="brief">
-                          <div><dt>문제</dt><dd>{r.brief.problem}</dd></div>
+                          {r.brief.problem && <div><dt>문제</dt><dd>{r.brief.problem}</dd></div>}
                           <div><dt>한 일</dt><dd>{r.brief.action}</dd></div>
                           <div><dt>결과</dt><dd>{r.brief.result}</dd></div>
                         </dl>
