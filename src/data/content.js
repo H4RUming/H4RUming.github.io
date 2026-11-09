@@ -15,7 +15,7 @@ export const stats = [
   { label: '특허 출원', value: 1 },
   { label: '대상', value: 2 },
   { label: '최우수상', value: 2 },
-  { label: '우수상', value: 1 },
+  { label: '우수상', value: 2 },
   { label: '팀장 프로젝트', value: 2 },
 ];
 
@@ -95,6 +95,15 @@ export const timeline = [
       { value: '약 이틀', label: '리더보드 1위 유지' },
     ],
     project: 'dacon-agent',
+  },
+  // 상장 발급 전 임시 기재 (2026.09.17 최종 심사 결과 기준). 상장이 나오면 docs에 추가.
+  {
+    year: 2026, month: 9, kind: 'award',
+    title: '2026 Halla Future Day',
+    org: '최종 심사, RecallFrame 팀',
+    badge: '우수상',
+    desc: '특허 출원한 RecallFrame 아이템으로 최종 심사 2위. 상장은 발급 전.',
+    project: 'recallframe',
   },
   {
     year: 2026, month: 7, kind: 'patent',
@@ -300,7 +309,7 @@ export const projects = {
     brief: {
       problem: '경증 치매 어르신의 절반 이상이 혼자 살고, 회상치료를 반복해 줄 사람이 없음.',
       action: '사진 1장과 음성 5초로 가족의 얼굴과 목소리를 재현해 기기 안에서 대화하는 구조 설계.',
-      result: '특허 출원, 얼굴 합성 21fps, 음성 합성 지연 0.4초.',
+      result: '2026 Halla Future Day 우수상, 특허 출원, 얼굴 합성 21fps, 음성 합성 지연 0.4초.',
     },
     problem: [
       '65세 이상 치매 환자는 97만 명, 그중 67.7%가 경증. 치매 환자 가구의 52.6%는 1인 가구.',
@@ -327,6 +336,7 @@ export const projects = {
       { value: '21fps', label: '얼굴 합성 속도' },
       { value: '0.4초', label: '음성 합성 지연' },
       { value: '사진 1장, 음성 5초', label: '가족 등록에 필요한 입력' },
+      { value: '우수상', label: '2026 Halla Future Day 최종 심사 (2위)' },
     ],
     tags: ['On-Device AI', 'Multimodal LLM', 'RAG', 'FAISS', 'Voice Cloning', 'Talking Head'],
   },
