@@ -64,11 +64,21 @@ export const timeline = [
     project: 'recallframe',
   },
   {
-    year: 2026, month: null, kind: 'contest',
+    year: 2026, month: 11, kind: 'contest',
     title: 'SK하이닉스 AI 해커톤 2026',
-    org: 'SK하이닉스',
-    desc: '기초 지식 테스트와 AI 활용 문제 풀이 예선. 1차 예선 통과, 2차 예선에서 탈락해 본선 미진출.',
+    org: 'SK하이닉스, 개인 참가',
     badge: '1차 예선 통과',
+    desc: '2차 예선(크래프톤 Cofa-Probe) 대비용으로 Codex 작업 하네스 kit을 만들어 응시했으나 2차에서 탈락. 조건을 하나씩 끝내는 직렬 흐름 탓에 결과물 전체를 세우는 단계가 늦어진 것이 주원인. 다음엔 인터페이스부터 정해 작업을 병렬로 나누도록 회고에 정리.',
+    brief: {
+      problem: '제공된 Codex만 쓰는 180분 실무형 과제. Computer Use 금지, 토큰 사용량과 AI 작업 기록까지 평가.',
+      action: '규칙 파일, 작업 문서 템플릿, 검증 스크립트 5개, 지시 카드로 하네스 구성. 1차 응시에서 드러난 문제를 kit에 반영.',
+      result: '1차 예선 합격, 2차 예선 탈락. 정보 수집과 AI 결과물 검토는 1차보다 개선, 결과물 완성도와 시간 배분은 부족.',
+    },
+    tags: ['Codex', 'Agent Harness', 'Retrospective'],
+    links: [
+      { label: '회고', url: 'https://github.com/H4RUming/kit/blob/main/retro/2026-skhynix-hackathon.md' },
+      { label: 'kit 저장소', url: 'https://github.com/H4RUming/kit' },
+    ],
   },
   {
     year: 2026, month: null, kind: 'project',
@@ -209,14 +219,17 @@ export const timeline = [
     title: 'kit',
     org: 'Codex 작업 하네스',
     badge: 'Python',
-    desc: '규칙 파일, 작업 문서 템플릿, 검증 도구를 하나로 묶어 긴 과제를 완료 조건 단위로 나눠 진행. 내 과제 작업에 실제로 사용 중.',
+    desc: '규칙 파일, 작업 문서 템플릿, 검증 도구를 하나로 묶어 긴 과제를 완료 조건 단위로 나눠 진행. SK하이닉스 AI 해커톤 2026 2차 예선 대비로 제작, 실전 응시 후 회고까지 정리.',
     brief: {
       problem: '코딩 에이전트에게 긴 과제를 맡기면 요구사항을 빠뜨리거나, 검증 없이 넘어가거나, 세션이 바뀔 때 맥락을 잃음.',
       action: '규칙 파일(AGENTS.md), 작업 문서 템플릿(TASK, DECISIONS, HANDOFF, VERIFY), 단계별 지시 카드, 검증 도구(테스트 요약, 웹 체크, DB 대조)를 하나로 묶음. 요구사항을 완료 조건 단위로 나눠 조건마다 구현, 테스트, 커밋 후 멈추도록 구성.',
       result: '내 과제 작업에 실제로 사용 중. 설치 스크립트 한 줄로 어느 과제 폴더에든 적용되고, 도구는 Python 표준 라이브러리만 사용.',
     },
     tags: ['Codex', 'Agent Harness', 'Python'],
-    links: [{ label: 'GitHub 저장소', url: 'https://github.com/H4RUming/kit' }],
+    links: [
+      { label: 'GitHub 저장소', url: 'https://github.com/H4RUming/kit' },
+      { label: '해커톤 회고', url: 'https://github.com/H4RUming/kit/blob/main/retro/2026-skhynix-hackathon.md' },
+    ],
   },
   {
     kind: 'github',
