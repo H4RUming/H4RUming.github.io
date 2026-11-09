@@ -87,8 +87,8 @@ export const timeline = [
     badge: '팀장',
     desc: '보행자의 자세와 시선으로 행동 의도를 읽어 사고 0.5~1초 전에 위험을 예측하는 교통사고 예방 AI. 230달러짜리 엣지 장비에서 서버 없이 실시간 동작.',
     metrics: [
-      { value: '97%', label: '사고 예측 정확도' },
-      { value: '약 30ms', label: '프레임당 처리' },
+      { value: '97%', label: '사고 예측 정확도 (평가 200건)' },
+      { value: '150ms', label: '탐지 속도 (평균)' },
       { value: '230달러', label: '장비 비용' },
     ],
     project: 'synapse',
@@ -367,7 +367,7 @@ export const projects = {
     brief: {
       problem: '기존 ADAS는 거리와 속도를 보고 위험이 생긴 뒤에 개입해 대응 시간이 부족함.',
       action: '보행자의 자세와 시선으로 의도를 읽고 GNN으로 관계를 추론하는 파이프라인을 230달러짜리 엣지 장비에 탑재.',
-      result: '예측 정확도 97%, 프레임당 약 30ms, 캡스톤 아이디어 경진대회 최우수상.',
+      result: '학습에 쓰지 않은 AI Hub 실도로 위험상황 평가세트 200건에서 사고 예측 정확도 97%, 탐지 속도 평균 150ms. 캡스톤 아이디어 경진대회 최우수상.',
     },
     problem: [
       '전 세계에서 매년 27만 명 이상의 보행자가 교통사고로 사망 (WHO, 2023).',
@@ -383,7 +383,7 @@ export const projects = {
         'Raspberry Pi 5와 Hailo-8 NPU에 올려, 서버 없이 실시간으로 동작.',
       ],
       pipeline: [
-        { name: 'Perception', tech: 'YOLOv8, ByteTrack', detail: '보행자와 차량 등 6종 객체를 탐지하고 고유 ID로 추적. 스켈레톤 키포인트로 자세와 시선을 뽑아 다음 단계로 전달. 프레임당 약 30ms.', mine: true },
+        { name: 'Perception', tech: 'YOLOv8, ByteTrack', detail: '보행자와 차량 등 6종 객체를 탐지하고 고유 ID로 추적. 스켈레톤 키포인트로 자세와 시선을 뽑아 다음 단계로 전달.', mine: true },
         { name: 'Gating', tech: '도로 환경 8종 분류', detail: '날씨, 시간대, 장소 같은 현재 도로 환경을 분류해 맞는 전문가 모델로 전달. 평균 신뢰도 97%, 약 50ms.', mine: true },
         { name: 'MoE', tech: 'Specialist Ensemble', detail: '모든 모델을 다 돌리지 않고, 상황에 맞는 전문가 모델(예를 들어 횡단보도 전문가)만 활성화해 연산량과 지연을 줄임. 약 165ms.', mine: true },
         { name: 'GNN', tech: 'Scene Graph', detail: '보행자, 차량, 신호등을 노드로 한 씬 그래프에서 메시지 패싱으로 관계를 추론. 충돌 가능성이 높은 엣지(예: 0.85)를 찾아 0.5~1초 뒤의 궤적과 위험도를 계산.', mine: true },
@@ -391,12 +391,12 @@ export const projects = {
       ],
     },
     results: [
-      { value: '97%', label: '사고 예측 정확도 (평균)' },
+      { value: '97%', label: '사고 예측 정확도 (평가세트 200건)' },
       { value: '150ms', label: '탐지 속도 (평균)' },
-      { value: '약 30ms', label: '프레임당 처리 (Hailo-8 NPU)' },
       { value: '230달러', label: '장비 비용 (Pi 5와 AI HAT+)' },
       { value: '최우수상', label: '2025 캡스톤디자인 아이디어 경진대회' },
     ],
+    resultsNote: '정확도 97%는 학습 데이터셋에 합치지 않은 AI Hub 실도로 위험상황 데이터로 만든 평가세트 200건 기준.',
     tags: ['Edge AI', 'Computer Vision', 'YOLOv8', 'GNN', 'Mixture of Experts', 'FastAPI', 'Hailo-8'],
   },
 
